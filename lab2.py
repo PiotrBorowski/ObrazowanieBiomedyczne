@@ -17,7 +17,7 @@ imsave('koleczko.png', circle((256, 512)))
 def chessboard(sin1, sin2, size):
     r1, r2 = np.meshgrid(sin1, sin2)
 
-    return np.digitize(np.cos(r1 + r2), bins=np.linspace(-1,1, num=2**size))
+    return np.digitize(r1*r2, bins=np.linspace(-1,1, num=2**size))
 
 
 x = np.linspace(0, 8 * np.math.pi, num=256)
