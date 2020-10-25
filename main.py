@@ -65,17 +65,7 @@ for i in range(256):
 plt.imsave('bar.png', image, cmap="gray")
 
 # ------------------------------------------------------------
-def circle(r):
-    d = 2 * r
-    rx, ry = d / 2, d / 2
-    x, y = np.indices((2*d, 2*d))
-    x = x - r
-    y = y - r
-    print(x, y)
-    return (np.abs(np.hypot(rx - x, ry - y) - r) > 1).astype(int)
 
-
-plt.imsave('kolko.png', circle(256) , cmap="gray")
 
 # rysowanie bez petli kolka numpy, korzystanie z distance metric
 # numpy złozyc z dwoch sinsow jeden, obraz z glebia linespace, min, max, potegowanie

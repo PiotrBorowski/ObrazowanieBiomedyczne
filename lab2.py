@@ -65,7 +65,7 @@ T_rotate = np.array([
     [1, 0, 0],
     [0, 0, 1]])
 
-scale = 2
+scale = 4
 T_scale = np.array([
     [scale, 0, 0],
     [0, scale, 0],
@@ -102,17 +102,28 @@ imgres1 = np.zeros((width, height))
 imgres2 = np.zeros((width, height))
 imgres3 = np.zeros((width, height))
 
+inx = res1[0][0 : width][0 : height] % width
+ix = inx[:, :, 0]
+iy = inx[:,:, 1]
 
-imgres1 = imgint[res1[0][0][0 : width, 0] % width][res1[0][0][0 : height, 1] % height]
+inx2 = res2[0][0 : width][0 : height] % width
+ix2 = inx2[:, :, 0]
+iy2 = inx2[:,:, 1]
 
-imgres2[:][:] = imgint[:][:]
-imgres3[:][:] = imgint[:][:]
+inx3 = res3[0][0 : width][0 : height] % width
+ix3 = inx3[:, :, 0]
+iy3 = inx3[:,:, 1]
+
+imgres1 = imgint[ix,iy]
+# print(imgres1)
+imgres2 = imgint[ix2,iy2]
+imgres3 = imgint[ix3,iy3]
 
 
 imsave('test.png', imgint)
 imsave('test1.png', imgres1.astype(int))
-imsave('test2.png', imgres2)
-imsave('test3.png', imgres3)
+imsave('test2.png', imgres2.astype(int))
+imsave('test3.png', imgres3.astype(int))
 
 # zaszumianie obrazu, wygenerowac z szumem i glebia kilka obrazów, potem odszumic, jedna operacja matematyczna
 # przeksztalcenia liniowe, negatyw, losowe (zamiana pikseli)
