@@ -53,7 +53,13 @@ plt.show()
 
 
 # ZAD 3
-s = 1
+T_reflect = np.array([
+    [1,0,0],
+    [0,-1,0],
+    [0,0,0]
+])
+
+s = np.sqrt(3)
 T_shear = np.array([
     [1, s, 0],
     [0, 1, 0],
@@ -61,69 +67,50 @@ T_shear = np.array([
 ])
 
 T_rotate = np.array([
-    [0, -1, 0],
-    [1, 0, 0],
+    [np.sqrt(2)/2, np.sqrt(2)/2, 0],
+    [np.sqrt(2)/-2, np.sqrt(2)/2, 0],
     [0, 0, 1]])
 
-scale = 4
+scale = 1.7
 T_scale = np.array([
     [scale, 0, 0],
     [0, scale, 0],
     [0, 0, 1]])
 
+T_pos = np.array([
+    [1, 0, 512],
+    [0, 1, 512],
+    [0, 0, 1]])
+
+T_neg = np.array([
+    [1, 0, -250],
+    [0, 1, -250],
+    [0, 0, 1]])
+
 img = imread('./lenna.png', as_gray=True)
-imgint = img_as_uint(img)
-height = len(imgint)
-width = len(imgint[0])
 
-x = np.linspace(0, width-1, num=width).astype(int)
-y = np.linspace(0, height-1, num=height).astype(int)
-
-mesh = np.array(np.meshgrid(x, y, 1)).T
-# print(mesh)
-
-
-res1 = mesh @ T_scale
-res2 = mesh @ T_shear
-res3 = mesh @ T_rotate
-
-print(res1[0], len(res1[0][1][0]))
-# print(res2)
-# print(res3)
-
-resx = res1[0][0]
-resy = res1[0][1]
-resx2 = res2[0][0]
-resy2 = res2[0][1]
-resx3 = res3[0][0]
-resy3 = res3[0][1]
-
-imgres1 = np.zeros((width, height))
-imgres2 = np.zeros((width, height))
-imgres3 = np.zeros((width, height))
-
-inx = res1[0][0 : width][0 : height] % width
-ix = inx[:, :, 0]
-iy = inx[:,:, 1]
-
-inx2 = res2[0][0 : width][0 : height] % width
-ix2 = inx2[:, :, 0]
-iy2 = inx2[:,:, 1]
-
-inx3 = res3[0][0 : width][0 : height] % width
-ix3 = inx3[:, :, 0]
-iy3 = inx3[:,:, 1]
-
-imgres1 = imgint[ix,iy]
-# print(imgres1)
-imgres2 = imgint[ix2,iy2]
-imgres3 = imgint[ix3,iy3]
+def affineTransform(img, transform):
+    imgint = img_as_uint(img)
+    height = len(imgint)
+    width = len(imgint[0])
+    x = np.linspace(0, width - 1, num=width).astype(int)
+    y = np.linspace(0, height - 1, num=height).astype(int)
+    mesh = np.array(np.meshgrid(x, y, 1)).T
+    res = mesh @ transform
+    res = res.astype(int)
+    inx = res[0][:][:] % width
+    ix = inx[:, :, 0]
+    iy = inx[:,:, 1]
+    imgres = np.zeros((max(inx.flatten()), max(inx.flatten())))
+    imgres = imgint[ix,iy]
+    return imgres;
 
 
-imsave('test.png', imgint)
-imsave('test1.png', imgres1.astype(int))
-imsave('test2.png', imgres2.astype(int))
-imsave('test3.png', imgres3.astype(int))
+
+imsave('shear.png', affineTransform(img, T_shear))
+imsave('rotate.png', affineTransform(img, T_rotate))
+imsave('scale.png', affineTransform(img, T_scale))
+imsave('reflect.png', affineTransform(img, T_reflect))
 
 # zaszumianie obrazu, wygenerowac z szumem i glebia kilka obrazów, potem odszumic, jedna operacja matematyczna
 # przeksztalcenia liniowe, negatyw, losowe (zamiana pikseli)
