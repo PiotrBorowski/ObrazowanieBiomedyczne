@@ -74,13 +74,18 @@ T_rotate = np.array([
 scale = 1.7
 T_scale = np.array([
     [scale, 0, 0],
-    [0, scale, 0],
+    [0, 1, 0],
     [0, 0, 1]])
 
 T_pos = np.array([
-    [1, 0, 512],
-    [0, 1, 512],
-    [0, 0, 1]])
+    [1, 0,0],
+    [0, 1, 0],
+    [300, 0, 1]])
+
+T_pos2 = np.array([
+    [1, 0,0],
+    [0, 1, 0],
+    [0, -500, 1]])
 
 T_neg = np.array([
     [1, 0, -250],
@@ -98,19 +103,27 @@ def affineTransform(img, transform):
     mesh = np.array(np.meshgrid(x, y, 1)).T
     res = mesh @ transform
     res = res.astype(int)
-    inx = res[0][:][:] % width
-    ix = inx[:, :, 0]
+    inx = res[0][:][:]
+    inx[inx < 0] = inx[inx< 0] + width
+    inx[inx >= width] = inx[inx >= width] % width
+
+    maxindex = max(inx.flatten()) + 1
+    ind = max(maxindex, width)
+    print(maxindex)
+    ix = inx[:,:, 0]
     iy = inx[:,:, 1]
-    imgres = np.zeros((max(inx.flatten()), max(inx.flatten())))
-    imgres = imgint[ix,iy]
-    return imgres;
+    # print('ind', ind)
+    # imgres = np.zeros((ind, ind))
+    # imgres[width+0 : width+width ,width+0 : width+width] = imgint
+    result = np.zeros((ind,ind))
+    result[0:width ,0:width] = imgint[ix,iy]
+    return result;
 
 
-
-imsave('shear.png', affineTransform(img, T_shear))
-imsave('rotate.png', affineTransform(img, T_rotate))
-imsave('scale.png', affineTransform(img, T_scale))
 imsave('reflect.png', affineTransform(img, T_reflect))
+imsave('rotate.png', affineTransform(img, T_rotate @ T_pos ))
+imsave('scale.png', affineTransform(img, T_scale @ T_pos))
+imsave('shear.png', affineTransform(img, T_shear))
 
 # zaszumianie obrazu, wygenerowac z szumem i glebia kilka obrazów, potem odszumic, jedna operacja matematyczna
 # przeksztalcenia liniowe, negatyw, losowe (zamiana pikseli)
