@@ -75,10 +75,10 @@ log = np.log(identity)
 imglog = log[imgint]
 
 
-gamma1 = np.array(255 * (img / 255) ** 0.1, dtype='uint8')
-gamma5 = np.array(255 * (img / 255) ** 0.5, dtype='uint8')
-gamma15 = np.array(255 * (img / 255) ** 1.5, dtype='uint8')
-gamma25 = np.array(255 * (img / 255) ** 2.5, dtype='uint8')
+gamma1 = np.array(255 * (identity / 255) ** 0.1, dtype='uint8')
+gamma5 = np.array(255 * (identity / 255) ** 0.5, dtype='uint8')
+gamma15 = np.array(255 * (identity / 255) ** 1.5, dtype='uint8')
+gamma25 = np.array(255 * (identity / 255) ** 2.5, dtype='uint8')
 
 imggamma1 = gamma1[imgint]
 imggamma5 = gamma5[imgint]
@@ -87,11 +87,14 @@ imggamma25 = gamma25[imgint]
 
 f, axarr = plt.subplots(6,2)
 
-axarr[0,0].plot(identity, log)
-axarr[0,1].imshow(imglog)
+axarr[0,0].plot(identity, identity)
+axarr[0,1].imshow(imgid)
 
-axarr[1,0].plot(identity, gamma1)
-axarr[1,1].imshow(imggamma1)
+axarr[1,0].plot(identity, log)
+axarr[1,1].imshow(imglog)
+
+axarr[2,0].plot(identity, gamma1)
+axarr[2,1].imshow(imggamma1)
 
 axarr[3,0].plot(identity, gamma5)
 axarr[3,1].imshow(imggamma5)
@@ -100,7 +103,7 @@ axarr[4,0].plot(identity, gamma15)
 axarr[4,1].imshow(imggamma15)
 
 axarr[5,0].plot(identity, gamma25)
-axarr[5,1].imshow(imggamma15)
+axarr[5,1].imshow(imggamma25)
 
 plt.show()
 
